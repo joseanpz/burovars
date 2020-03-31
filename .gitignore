@@ -1,0 +1,15 @@
+.idea/
+.vscode/
+venv/
+.wenv.cmd
+__pycache__/
+logs/
+errors.json
+
+parametrico.log
+
+app/solicitud/cweb/test_data/*.csv
+tests/test_data/*.csv
+tests/test_data/
+*.sql
+vsreqirements.txt

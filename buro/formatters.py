@@ -70,14 +70,14 @@ class BuroCuentasFormatter:
                     setattr(self, f.name, 0)
                 else:
                     setattr(self, f.name, None)
-            elif f.name == 'cufSalAct':
-                value = value.rstrip('+').rstrip('-')
-                setattr(self, f.name, f.type(value))
+            # elif f.name == 'cufSalAct':
+            #     value = value.rstrip('+').rstrip('-')
+            #     setattr(self, f.name, f.type(value))
             elif f.name == 'fecFecBur':
                 value = value.rstrip('+').rstrip('-')
-                setattr(self, f.name, datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f').date())
+                setattr(self, f.name, datetime.strptime(value, '%Y-%m-%d').date())
             elif f.type == date:
-                setattr(self, f.name, datetime.strptime(value, '%d%m%Y').date())
+                setattr(self, f.name, datetime.strptime(value, '%Y-%m-%d').date())
 
             elif not isinstance(value, f.type):
                 try:
@@ -117,7 +117,7 @@ class BuroConsultaFormatter:
                 value = value.rstrip('+').rstrip('-')
                 setattr(self, f.name, datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f').date())
             elif f.type == date:
-                setattr(self, f.name, datetime.strptime(value, '%d%m%Y').date())
+                setattr(self, f.name, datetime.strptime(value, '%Y-%m-%d').date())
             elif not isinstance(value, f.type):
                 try:
                     setattr(self, f.name, f.type(value))

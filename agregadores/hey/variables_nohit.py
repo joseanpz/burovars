@@ -1,9 +1,9 @@
 from dataclasses import make_dataclass
 
-from app.buro.agregadores import (ConstructorVariablesAgregadasCuentas,
+from buro.agregadores import (ConstructorVariablesAgregadasCuentas,
                                   CtrlVariablesConsultas,
                                   MapeoVariablesCuentas)
-from mlwrapper.campo.models import CampoAgregado
+from campo.models import CampoAgregado
 
 max_ms_op_tu_all = CampoAgregado('cuentas', 'max', 'ms_op', 'tu_all')
 num_iq_03_no_impl = CampoAgregado('consultas', 'num', 'iq_03m_no_impl')

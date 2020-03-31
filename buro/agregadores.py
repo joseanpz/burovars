@@ -269,6 +269,7 @@ class ConstructorVariablesAgregadasCuentas:
     lista_var_buro_cuentas: List[VariablesBuroCuentasModel]
 
     # middle vars
+    vectores_fecha: List[VariablesVectorFechaCuentasIngresos] = field(init=False)
     lista_var_cuentas: List[dict] = field(init=False)
     lista_var_cuentas_ingresos: List[VariablesVectorFechaCuentasIngresos] = field(init=False)
 
@@ -292,6 +293,7 @@ class ConstructorVariablesAgregadasCuentas:
         return VariablesVectorFechaCuentasIngresos
 
     def __post_init__(self):
+        self.configura_vectore_fecha()
         self.configura_lista_var_cuentas_ingresos()
         self.configura_lista_var_cuentas()
         self.configura_var_agregadas_cuentas()
@@ -303,31 +305,35 @@ class ConstructorVariablesAgregadasCuentas:
                               if x.cuf_fec_cie else True),
                          self.lista_var_buro_cuentas))
 
-    def configura_lista_var_cuentas_ingresos(self):
-        vectores_fecha = []
+    def configura_vectores_fecha():
+        self.vectores_fecha = []
         for var_buro_cuenta in self.lista_var_buro_cuentas:
-            vectores_fecha.append(self.clase_subvar_vec(var_buro_cuenta.cuf_fec_ape,
-                                  self.vector_fecha_limite(var_buro_cuenta.cuf_fec_ape)))
+            vectores_fecha.append(
+                self.clase_subvar_vec(var_buro_cuenta.cuf_fec_ape, self.vector_fecha_limite(var_buro_cuenta.cuf_fec_ape))
+            )
             vectores_fecha.append(
                 self.clase_subvar_vec(var_buro_cuenta.cuf_fec_cie, self.vector_fecha_limite(var_buro_cuenta.cuf_fec_cie))
                 if var_buro_cuenta.cuf_fec_cie
-                else self.clase_subvar_vec(var_buro_cuenta.fecha_alta, self.vector_fecha_limite(var_buro_cuenta.fecha_alta)))
+                else self.clase_subvar_vec(var_buro_cuenta.fecha_alta, self.vector_fecha_limite(var_buro_cuenta.fecha_alta))
+            )
 
-        vectores_fecha = list(set(vectores_fecha))
-        vectores_fecha.sort(reverse=True)
+        self.vectores_fecha = list(set(self.vectores_fecha))
+        self.vectores_fecha.sort(reverse=True)
 
         prev = None
-        for vf in vectores_fecha:
+        for vf in self.vectores_fecha:
             if prev and prev.vector == vf.vector:
                 vf.fecha = prev.fecha
             prev = vf
 
-        vectores_fecha = list(set(vectores_fecha))
-        vectores_fecha.sort()
+        self.vectores_fecha = list(set(self.vectores_fecha))
+        self.vectores_fecha.sort()
+    
+    def configura_lista_var_cuentas_ingresos(self):        
 
         self.lista_var_cuentas_ingresos = [
             vector_fecha.contruye_var_cuentas_ingreso(self.lista_var_buro_cuentas)
-            for vector_fecha in vectores_fecha
+            for vector_fecha in self.vectores_fecha
         ]
 
     def configura_lista_var_cuentas(self):
