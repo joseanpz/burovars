@@ -115,7 +115,7 @@ class BuroConsultaFormatter:
                 setattr(self, f.name, None)
             elif f.name == 'cofFecBur':
                 value = value.rstrip('+').rstrip('-')
-                setattr(self, f.name, datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f').date())
+                setattr(self, f.name, datetime.strptime(value, '%Y-%m-%d').date())
             elif f.type == date:
                 setattr(self, f.name, datetime.strptime(value, '%Y-%m-%d').date())
             elif not isinstance(value, f.type):

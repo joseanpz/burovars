@@ -1,4 +1,4 @@
-scfFolio2,scfConsec2,scfNombre2,scfCodigo2,scfValor2,scfRazon12,scfRazon22,scfRazon32,scfCodErr2,scfRecal2,scfFraude2,inpICCVal2
+scfFolio,scfConsec,scfNombre,scfCodigo,scfValor,scfRazon1,scfRazon2,scfRazon3,scfCodErr,scfRecal,scfFraude,inpICCVal
 2335945,1,BC SCORE,7,0497,01,13,15, , , , 
 2335955,1,BC SCORE,7,0569,17,31,32, , , , 
 2335980,1,BC SCORE,7,0719,04,28, , , , , 

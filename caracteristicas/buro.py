@@ -17,12 +17,47 @@ replaces = [
 class FeaturesBuro:
     features: List[str]
     campos: List[CampoAgregado] = field(init=False)
-    subvariables_cuentas: Any = field(init=False)  # container class
-    subvariables_vector_cuentas: Any = field(init=False)  # container class
-    variables_cuentas: Any = field(init=False)  # container class
+
+    # types
+    subvariables_cuentas: type = field(init=False)  # container class
+    subvariables_vector_cuentas: type = field(init=False)  # container class
+    variables_cuentas: type = field(init=False)  # container class
+
+    subvariables_consultas: type = field(init=False) # container class
+    variables_consultas: type = field(init=False) # container class
+
+    subvariables_score: type = field(init=False) # container class
+    variables_score: type = field(init=False) # container class
 
     def __post_init__(self):
         self.campos = self.construye_campos()
+        self.configura_features_consultas()
+        self.configura_features_score()
+        self.configura_features_cuentas()
+
+    def configura_features_consultas(self):
+        self.subvariables_consultas = make_dataclass(
+            'SubVariablesConsultas',
+            [(campo.nombre, float, None) for campo in self.subcampos_consultas]
+        )
+
+        self.variables_consultas = make_dataclass(
+            'VariablesConsultas',
+            [(campo.nombre, float, None) for campo in self.campos_consultas]
+        )
+
+    def configura_features_score(self):
+        self.subvariables_score = make_dataclass(
+            'SubVariablesScore',
+            [(campo.nombre, float, None) for campo in self.subcampos_score]
+        )
+
+        self.variables_score = make_dataclass(
+            'VariablesScore',
+            [(campo.nombre, float, None) for campo in self.campos_score]
+        )
+
+    def configura_features_cuentas(self):
         self.subvariables_cuentas = make_dataclass(
             'SubVariablesCuentas',
             [(campo.nombre, float, None) for campo in self.subcampos_cuentas]
@@ -44,7 +79,7 @@ class FeaturesBuro:
                 if self.features[i] == rep:
                     self.features[i] = rep.replace('_tu', '')
         _campos = {}
-        with open('varmap.csv') as varmap_file:
+        with open('caracteristicas/varmap.csv') as varmap_file:
             for line in varmap_file:
                 line_split = line.strip('\n').split('|')
                 for feature in self.features:
@@ -62,6 +97,10 @@ class FeaturesBuro:
                             raise e
 
         return [_campos[feature] for feature in self.features]
+
+    @property
+    def campos_score(self):
+        return tuple(filter(lambda x: x.segmento == 'score', self.campos))
 
     @property
     def campos_cuentas(self):
